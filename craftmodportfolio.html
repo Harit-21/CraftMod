@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Craft Mod | Premium Showroom</title>
+
+<style>
+  /* --- GLOBAL & TYPOGRAPHY --- */
+  :root {
+    --bg-color: #fafaf9; /* Luxurious off-white */
+    --text-main: #1c1917; /* Soft matte black */
+    --text-muted: #78716c;
+    --accent: #d6d3d1;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  body.loading {
+    overflow: hidden;
+  }
+
+  /* --- LOADER OVERLAY --- */
+  #loader-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1), visibility 1.2s;
+  }
+
+  .loader-hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* The Loader SVG */
+  #loader-svg {
+    width: 450px;
+    max-width: 85vw;
+  }
+
+  /* --- PREMIUM SPRING ANIMATIONS --- */
+  /* Using 'Apple-style' spring curves for high-end feel */
+  .lamp-drop {
+    transform-origin: 370px 40px;
+    transform: rotate(35deg) translateY(-40px);
+    opacity: 0;
+    animation: premiumSwing 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.1) 0.3s forwards;
+  }
+
+  .slide-left {
+    transform: translateX(-60px) rotate(-5deg);
+    opacity: 0;
+    animation: premiumSettleLeft 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+  }
+
+  .slide-right {
+    transform: translateX(60px) translateY(15px);
+    opacity: 0;
+    animation: premiumSettleRight 1.4s cubic-bezier(0.16, 1, 0.3, 1) 1s forwards;
+  }
+
+  .bulb-glow {
+    opacity: 0;
+    animation: premiumSnapOn 0.1s ease-in 1.9s forwards;
+  }
+
+  .light-beam {
+    opacity: 0;
+    animation: beamFadeIn 1s ease-out 1.9s forwards;
+  }
+
+  .text-reveal {
+    opacity: 0;
+    transform: translateY(15px);
+    animation: revealPremiumText 1.2s cubic-bezier(0.22, 1, 0.36, 1) 2.2s forwards;
+  }
+
+  @keyframes premiumSwing {
+    0% { transform: rotate(35deg) translateY(-40px); opacity: 0; }
+    100% { transform: rotate(0deg) translateY(0); opacity: 1; }
+  }
+
+  @keyframes premiumSettleLeft {
+    0% { transform: translateX(-60px) rotate(-5deg); opacity: 0; }
+    100% { transform: translateX(0) rotate(0); opacity: 1; }
+  }
+
+  @keyframes premiumSettleRight {
+    0% { transform: translateX(60px) translateY(15px); opacity: 0; }
+    100% { transform: translateX(0) translateY(0); opacity: 1; }
+  }
+
+  @keyframes premiumSnapOn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes beamFadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+
+  @keyframes revealPremiumText {
+    0% { opacity: 0; letter-spacing: 0.1em; transform: translateY(15px); }
+    100% { opacity: 1; letter-spacing: 0.35em; transform: translateY(0); }
+  }
+
+  /* --- MAIN CONTENT (SHOWROOM PORTFOLIO) --- */
+  #main-content {
+    padding: 6vw 8vw;
+    max-width: 1600px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1.5s cubic-bezier(0.22, 1, 0.36, 1), transform 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  body:not(.loading) #main-content {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Header */
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 6vw;
+    border-bottom: 1px solid #e7e5e4;
+    padding-bottom: 2rem;
+  }
+
+  header h1 {
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  header nav a {
+    text-decoration: none;
+    color: var(--text-muted);
+    margin-left: 3rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: color 0.3s;
+  }
+
+  header nav a:hover {
+    color: var(--text-main);
+  }
+
+  /* Editorial Grid */
+  .portfolio-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 2vw;
+  }
+
+  .grid-item {
+    position: relative;
+    background-color: #f5f5f4;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 3/4;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .grid-item:hover {
+    transform: scale(0.98);
+  }
+
+  /* Staggered masonry layout */
+  .item-1 { grid-column: span 5; aspect-ratio: 4/5; }
+  .item-2 { grid-column: span 7; aspect-ratio: 16/9; margin-top: 4vw; }
+  .item-3 { grid-column: span 4; }
+  .item-4 { grid-column: span 4; margin-top: -4vw; }
+  .item-5 { grid-column: span 4; margin-top: 8vw; }
+
+  /* Image Placeholders / Overlays */
+  .image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #e7e5e4, #f5f5f4);
+    transition: transform 0.8s ease;
+  }
+
+  .grid-item:hover .image-placeholder {
+    transform: scale(1.05);
+  }
+
+  .item-details {
+    position: absolute;
+    bottom: 2rem;
+    left: 2rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+  }
+
+  .grid-item:hover .item-details {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .item-details span {
+    display: block;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #57534e;
+  }
+
+  .item-details h3 {
+    margin: 0.3rem 0 0 0;
+    font-size: 1.5rem;
+    font-weight: 400;
+  }
+
+</style>
+</head>
+
+<body class="loading">
+
+  <div id="loader-wrapper">
+    <svg id="loader-svg" viewBox="0 0 400 450">
+      <defs>
+        <linearGradient id="beamGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#fef08a" stop-opacity="0.4"/>
+          <stop offset="100%" stop-color="#fef08a" stop-opacity="0"/>
+        </linearGradient>
+
+        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+          <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+        
+        <filter id="shadowBlur">
+          <feGaussianBlur stdDeviation="6"/>
+        </filter>
+      </defs>
+
+      <ellipse cx="200" cy="335" rx="140" ry="8" fill="#e7e5e4" filter="url(#shadowBlur)" />
+
+      <g class="light-beam">
+        <polygon points="290,110 330,135 450,350 50,350" fill="url(#beamGradient)" />
+      </g>
+
+      <g class="lamp-drop">
+        <path d="M 370 40 C 330 30 300 50 290 80" fill="none" stroke="#292524" stroke-width="4" stroke-linecap="round"/>
+        <g transform="translate(290, 80) rotate(-35)">
+          <circle class="bulb-glow" cx="0" cy="35" r="14" fill="#fcd34d" filter="url(#glow)"/>
+          <circle cx="0" cy="35" r="14" fill="#fde68a" opacity="0.8"/>
+          <path d="M -35 40 C -35 -5 35 -5 35 40 Z" fill="#292524" stroke="#1c1917" stroke-width="2" stroke-linejoin="round"/>
+          <rect x="-40" y="40" width="80" height="4" rx="2" fill="#1c1917"/>
+          <path d="M -10 0 C -10 -15 10 -15 10 0 Z" fill="#1c1917"/>
+        </g>
+      </g>
+
+      <g class="slide-left">
+        <line x1="130" y1="280" x2="110" y2="330" stroke="#292524" stroke-width="6" stroke-linecap="round"/>
+        <line x1="160" y1="285" x2="175" y2="330" stroke="#292524" stroke-width="6" stroke-linecap="round"/>
+        <path d="M 160 180 A 45 45 0 0 0 115 235 A 45 45 0 0 0 160 285 Q 195 285 195 260 Q 195 245 180 245 A 20 20 0 0 1 155 235 A 20 20 0 0 1 175 210 Q 185 210 180 190 Q 175 180 160 180 Z" fill="#e7e5e4" stroke="#292524" stroke-width="4" stroke-linejoin="round"/>
+        <path d="M 155 185 A 40 40 0 0 0 120 235 A 40 40 0 0 0 160 275" fill="none" stroke="#fafaf9" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+      </g>
+
+      <g class="slide-right">
+        <path d="M 235 330 L 245 245 L 265 295 L 285 245 L 295 330" fill="none" stroke="#292524" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="215" y="235" width="110" height="8" rx="3" fill="#d6d3d1" stroke="#292524" stroke-width="3"/>
+      </g>
+
+      <text class="text-reveal" x="200" y="410" font-size="22" font-weight="600" fill="#1c1917" text-anchor="middle" dominant-baseline="middle">
+        CRAFT MOD
+      </text>
+    </svg>
+  </div>
+
+
+  <main id="main-content">
+    <header>
+      <h1>Selected<br>Works &mdash; 2026</h1>
+      <nav>
+        <a href="#">Collection</a>
+        <a href="#">Studio</a>
+        <a href="#">Contact</a>
+      </nav>
+    </header>
+
+    <section class="portfolio-grid">
+      <div class="grid-item item-1">
+        <div class="image-placeholder"></div>
+        <div class="item-details">
+          <span>01 / Seating</span>
+          <h3>The Curve Lounge</h3>
+        </div>
+      </div>
+      
+      <div class="grid-item item-2">
+        <div class="image-placeholder" style="background: linear-gradient(45deg, #d6d3d1, #e7e5e4);"></div>
+        <div class="item-details">
+          <span>02 / Tables</span>
+          <h3>Oak & Matte Black Series</h3>
+        </div>
+      </div>
+
+      <div class="grid-item item-3">
+        <div class="image-placeholder"></div>
+        <div class="item-details">
+          <span>03 / Lighting</span>
+          <h3>Pendant No. 4</h3>
+        </div>
+      </div>
+
+      <div class="grid-item item-4">
+        <div class="image-placeholder" style="background: linear-gradient(45deg, #f0ece9, #fafaf9);"></div>
+        <div class="item-details">
+          <span>04 / Decor</span>
+          <h3>Minimalist Vase</h3>
+        </div>
+      </div>
+
+      <div class="grid-item item-5">
+        <div class="image-placeholder" style="background: linear-gradient(45deg, #e7e5e4, #d6d3d1);"></div>
+        <div class="item-details">
+          <span>05 / Storage</span>
+          <h3>Floating Credenza</h3>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    window.addEventListener('load', () => {
+      const loader = document.getElementById('loader-wrapper');
+      
+      // Calculate how long to wait. The SVG animation finishes around 3.4 seconds.
+      const timeNow = performance.now();
+      const minimumShowTime = 3400; 
+      const delay = Math.max(0, minimumShowTime - timeNow);
+
+      setTimeout(() => {
+        // 1. Fade the loader
+        loader.classList.add('loader-hidden');
+        
+        // 2. Unlock the page (which triggers the CSS to slide the portfolio in)
+        document.body.classList.remove('loading');
+        
+      }, delay);
+    });
+  </script>
+
+</body>
+</html>

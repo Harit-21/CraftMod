@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Craft Mod | Premium Showroom</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,300;1,400&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* --- GLOBAL & TYPOGRAPHY --- */
+    :root {
+      --bg-color: #f4f3f0;
+      /* Slightly warmer, luxurious off-white */
+      --text-main: #151413;
+      /* Deep studio black */
+      --text-muted: #8a837b;
+      --accent: #d6d3d1;
+      --bezier-smooth: cubic-bezier(0.85, 0, 0.15, 1);
+      --bezier-spring: cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      cursor: crosshair;
+      /* Premium technical studio vibe */
+    }
+
+    body.loading {
+      overflow: hidden;
+    }
+
+    /* Subtle Noise Texture */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* --- LOADER OVERLAY (YOUR EXISTING ANIMATION) --- */
+    #loader-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #151413;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: transform 1.2s var(--bezier-smooth), border-radius 1.2s var(--bezier-smooth);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .loader-hidden {
+      transform: translateY(-100%);
+      border-bottom-left-radius: 40%;
+      border-bottom-right-radius: 40%;
+    }
+
+    #loader-svg {
+      width: 500px;
+      max-width: 90vw;
+      overflow: visible;
+    }
+
+    .draw-line {
+      fill: none;
+      stroke: #e7e5e4;
+      stroke-width: 12;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: blueprintDraw 2s cubic-bezier(0.65, 0, 0.35, 1) forwards;
+    }
+
+    .draw-line.delay-m {
+      animation-delay: 0.4s;
+    }
+
+    .snap-in {
+      fill: #e7e5e4;
+      opacity: 0;
+      transform: translateY(-15px);
+      animation: premiumSnap 0.8s var(--bezier-spring) forwards;
+    }
+
+    .snap-in.cushion {
+      animation-delay: 1.4s;
+    }
+
+    .snap-in.table-top {
+      animation-delay: 1.6s;
+    }
+
+    .snap-in.vase {
+      animation-delay: 1.8s;
+    }
+
+    .spotlight-beam {
+      opacity: 0;
+      transform-origin: center top;
+      transform: scaleY(0.5);
+      animation: beamTurnOn 0.8s var(--bezier-smooth) 2.4s forwards;
+    }
+
+    .floor-line {
+      stroke: #333;
+      stroke-width: 2;
+      stroke-linecap: round;
+      opacity: 0;
+      animation: fadeFloor 1s ease 0.2s forwards;
+    }
+
+    @keyframes blueprintDraw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes premiumSnap {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes beamTurnOn {
+      0% {
+        opacity: 0;
+        transform: scaleY(0.5);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scaleY(1);
+      }
+    }
+
+    @keyframes fadeFloor {
+      to {
+        opacity: 1;
+      }
+    }
+
+    .loader-text {
+      margin-top: 40px;
+      color: #e7e5e4;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(15px);
+      animation: textRise 1s var(--bezier-smooth) 2.7s forwards;
+    }
+
+    .loader-text span {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      letter-spacing: 0.2em;
+      margin-right: 5px;
+    }
+
+    @keyframes textRise {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* --- PREMIUM EDITORIAL SHOWROOM LAYOUT --- */
+
+    /* The Fixed Vertical Axis */
+    .brand-axis {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 80px;
+      height: 100vh;
+      border-right: 1px solid rgba(21, 20, 19, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-direction: column;
+      padding: 40px 0;
+      z-index: 50;
+    }
+
+    .axis-text {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.3em;
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    /* Main Scrolling Container */
+    #main-content {
+      margin-left: 80px;
+      /* Offset for the axis */
+      width: calc(100% - 80px);
+      box-sizing: border-box;
+    }
+
+    /* Floating Top Nav */
+    header {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 40px 5vw;
+      display: flex;
+      gap: 3rem;
+      z-index: 40;
+    }
+
+    header a {
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-weight: 500;
+      position: relative;
+    }
+
+    header a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0%;
+      height: 1px;
+      background: var(--text-main);
+      transition: width 0.4s var(--bezier-smooth);
+    }
+
+    header a:hover::after {
+      width: 100%;
+    }
+
+    /* Cinematic Hero */
+    .hero {
+      height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 5vw 10vh 5vw;
+      box-sizing: border-box;
+    }
+
+    .hero-meta {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 2rem;
+      color: var(--text-muted);
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(4rem, 9vw, 12rem);
+      line-height: 0.85;
+      margin: 0;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 i {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--text-muted);
+    }
+
+    /* --- THE EDITORIAL GALLERY (Asymmetrical Overlaps) --- */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 2vw;
+      padding: 0 5vw 15vw 5vw;
+    }
+
+    .grid-item {
+      position: relative;
+      overflow: hidden;
+      background: #e7e5e4;
+      opacity: 0;
+      transform: translateY(80px);
+      transition: opacity 1.2s var(--bezier-smooth), transform 1.2s var(--bezier-smooth);
+    }
+
+    body:not(.loading) .grid-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Staggered load delays */
+    body:not(.loading) .item-1 {
+      transition-delay: 1.0s;
+    }
+
+    body:not(.loading) .item-2 {
+      transition-delay: 1.1s;
+    }
+
+    body:not(.loading) .item-3 {
+      transition-delay: 1.2s;
+    }
+
+    body:not(.loading) .item-4 {
+      transition-delay: 1.3s;
+    }
+
+    body:not(.loading) .item-5 {
+      transition-delay: 1.4s;
+    }
+
+    /* Asymmetrical Placements - Breaking the box */
+    .item-1 {
+      grid-column: 2 / 8;
+      aspect-ratio: 4/5;
+      z-index: 2;
+    }
+
+    .item-2 {
+      grid-column: 7 / 12;
+      aspect-ratio: 3/4;
+      margin-top: 25vw;
+      z-index: 1;
+    }
+
+    .item-3 {
+      grid-column: 1 / 13;
+      aspect-ratio: 21/9;
+      margin-top: 15vw;
+    }
+
+    /* Ultra-wide cinematic shot */
+    .item-4 {
+      grid-column: 3 / 7;
+      aspect-ratio: 1/1;
+      margin-top: 10vw;
+    }
+
+    .item-5 {
+      grid-column: 8 / 12;
+      aspect-ratio: 4/5;
+      margin-top: -8vw;
+      z-index: 3;
+    }
+
+    /* Premium Placeholder Styling (Replace with real images later) */
+    .image-placeholder {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+      transition: transform 1.5s var(--bezier-smooth), filter 1s ease;
+      filter: grayscale(100%) contrast(1.1);
+      transform: scale(1.1);
+      /* Zoomed in by default */
+    }
+
+    /* Realistic Studio Gradients for placeholders */
+    .item-1 .image-placeholder {
+      background: linear-gradient(160deg, #d6d3d1, #a8a29e);
+    }
+
+    .item-2 .image-placeholder {
+      background: linear-gradient(160deg, #57534e, #292524);
+    }
+
+    .item-3 .image-placeholder {
+      background: linear-gradient(160deg, #e7e5e4, #d6d3d1);
+    }
+
+    .item-4 .image-placeholder {
+      background: linear-gradient(160deg, #292524, #1c1917);
+    }
+
+    .item-5 .image-placeholder {
+      background: linear-gradient(160deg, #a8a29e, #78716c);
+    }
+
+    /* The "Zoom-Out" Reveal Effect */
+    .grid-item:hover .image-placeholder {
+      transform: scale(1);
+      filter: grayscale(0%) contrast(1);
+    }
+
+    /* Dark Reveal Overlay */
+    .item-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(21, 20, 19, 0.4);
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    .grid-item:hover .item-overlay {
+      opacity: 1;
+    }
+
+    /* Typography Reveal on Image */
+    .item-details {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 3vw;
+      width: 100%;
+      box-sizing: border-box;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s var(--bezier-smooth);
+      color: #f4f3f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .grid-item:hover .item-details {
+      opacity: 1;
+      transform: translateY(0);
+      transition-delay: 0.1s;
+    }
+
+    .item-details span {
+      display: block;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      margin-bottom: 0.5rem;
+    }
+
+    .item-details h3 {
+      margin: 0;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 300;
+      font-style: italic;
+    }
+
+    /* Technical crosshair icon in corner */
+    .item-details .icon {
+      font-size: 1.5rem;
+      font-weight: 300;
+    }
+
+    /* --- MONOLITHIC FOOTER --- */
+    footer {
+      background: var(--text-main);
+      color: var(--bg-color);
+      padding: 10vw 5vw 4vw 5vw;
+      display: flex;
+      flex-direction: column;
+      gap: 10vw;
+    }
+
+    .footer-huge {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 10rem);
+      line-height: 0.9;
+      font-style: italic;
+      font-weight: 300;
+      margin: 0;
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-top: 1px solid rgba(244, 243, 240, 0.2);
+      padding-top: 3vw;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 3vw;
+    }
+
+    .social-links a {
+      color: var(--bg-color);
+      text-decoration: none;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      transition: opacity 0.3s;
+    }
+
+    .social-links a:hover {
+      opacity: 0.5;
+    }
+
+    .legal {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+
+<body class="loading">
+
+  <div id="loader-wrapper">
+    <svg id="loader-svg" viewBox="0 0 600 400">
+      <defs>
+        <linearGradient id="spotlightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#fef08a" stop-opacity="0.15" />
+          <stop offset="60%" stop-color="#fef08a" stop-opacity="0.05" />
+          <stop offset="100%" stop-color="#fef08a" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+
+      <polygon points="200,0 400,0 550,400 50,400" fill="url(#spotlightGrad)" class="spotlight-beam" />
+      <line x1="80" y1="330" x2="520" y2="330" class="floor-line" />
+
+      <g id="c-chair">
+        <path class="draw-line" d="M 230,170 A 80 80 0 0 0 230,330 L 250,330" />
+        <rect class="snap-in cushion" x="160" y="255" width="65" height="14" rx="7" />
+      </g>
+
+      <g id="m-table">
+        <path class="draw-line delay-m" d="M 285,330 L 325,210 L 360,285 L 395,210 L 435,330" />
+        <rect class="snap-in table-top" x="270" y="196" width="180" height="14" rx="7" />
+        <path class="snap-in vase" d="M 345,196 L 350,155 L 370,155 L 375,196 Z" />
+      </g>
+    </svg>
+    <div class="loader-text"><span>Craft</span> Mod</div>
+  </div>
+
+  <aside class="brand-axis">
+    <div class="axis-text">Craft Mod Studio</div>
+    <div class="axis-text" style="color: var(--text-muted);">Est. 2026</div>
+  </aside>
+
+  <main id="main-content">
+
+    <header>
+      <a href="#collection">Collection</a>
+      <a href="#philosophy">Philosophy</a>
+      <a href="#contact">Contact</a>
+    </header>
+
+    <section class="hero">
+      <div class="hero-meta">001 // Core Philosophy</div>
+      <h1>Shaping <i>the</i><br>Modern <i>Void.</i></h1>
+    </section>
+
+    <section class="portfolio-grid" id="collection">
+
+      <div class="grid-item item-1">
+        <div class="image-placeholder"
+          style="background-image: url('https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?q=80&w=1000&auto=format&fit=crop');">
+        </div>
+        <div class="item-overlay"></div>
+        <div class="item-details">
+          <div>
+            <span>01 / Seating</span>
+            <h3>The Curve</h3>
+          </div>
+          <div class="icon">+</div>
+        </div>
+      </div>
+
+      <div class="grid-item item-2">
+        <div class="image-placeholder"></div>
+        <div class="item-overlay"></div>
+        <div class="item-details">
+          <div>
+            <span>02 / Tables</span>
+            <h3>Monolith</h3>
+          </div>
+          <div class="icon">+</div>
+        </div>
+      </div>
+
+      <div class="grid-item item-3">
+        <div class="image-placeholder"></div>
+        <div class="item-overlay"></div>
+        <div class="item-details">
+          <div>
+            <span>03 / Lighting</span>
+            <h3>Pendant Series</h3>
+          </div>
+          <div class="icon">+</div>
+        </div>
+      </div>
+
+      <div class="grid-item item-4">
+        <div class="image-placeholder"></div>
+        <div class="item-overlay"></div>
+        <div class="item-details">
+          <div>
+            <span>04 / Decor</span>
+            <h3>Vase No. 8</h3>
+          </div>
+          <div class="icon">+</div>
+        </div>
+      </div>
+
+      <div class="grid-item item-5">
+        <div class="image-placeholder"></div>
+        <div class="item-overlay"></div>
+        <div class="item-details">
+          <div>
+            <span>05 / Storage</span>
+            <h3>Credenza</h3>
+          </div>
+          <div class="icon">+</div>
+        </div>
+      </div>
+
+    </section>
+
+    <footer id="contact">
+      <h2 class="footer-huge">Let's Craft.</h2>
+
+      <div class="footer-bottom">
+        <div class="social-links">
+          <a href="#">IG // @CraftMod</a>
+          <a href="#">PIN // CraftModStudio</a>
+          <a href="#">IN // Craft Mod</a>
+        </div>
+        <div class="legal">
+          &copy; 2026 Craft Mod. All Rights Reserved.
+        </div>
+      </div>
+    </footer>
+
+  </main>
+
+  <script>
+    window.addEventListener('load', () => {
+      const loader = document.getElementById('loader-wrapper');
+
+      // Sync perfectly with the SVG blueprint animation
+      const minimumShowTime = 4500;
+      const timeNow = performance.now();
+      const delay = Math.max(0, minimumShowTime - timeNow);
+
+      setTimeout(() => {
+        // 1. Pull the curtain up!
+        loader.classList.add('loader-hidden');
+
+        // 2. Unlock page scrolling & trigger staggered entrances
+        document.body.classList.remove('loading');
+
+        // 3. Remove loader from DOM for performance
+        setTimeout(() => {
+          loader.style.display = 'none';
+        }, 1200);
+
+      }, delay);
+    });
+  </script>
+
+</body>
+
+</html>
