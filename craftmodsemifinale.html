@@ -158,198 +158,279 @@
       filter: drop-shadow(0px 30px 40px rgba(0, 0, 0, 0.8));
     }
 
-    /* ========================================= */
-    /* --- PREMIUM LOADER ANIMATIONS --- */
-    /* ========================================= */
-    .sculpt-left {
-      transform-origin: center bottom;
+    /* Loader Animations (From your physics code) */
+    .chair-group {
+      transform-origin: 140px 330px;
       opacity: 0;
-      animation: enterLeft 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+      animation: dropSquashChair 1.4s cubic-bezier(0.25, 1, 0.5, 1) 0.2s forwards;
     }
 
-    .sculpt-right {
-      transform-origin: center bottom;
+    .table-group {
+      transform-origin: 265px 330px;
       opacity: 0;
-      animation: enterRight 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+      animation: dropSquashTable 1.4s cubic-bezier(0.25, 1, 0.5, 1) 0.35s forwards;
     }
 
-    .pendant-drop {
-      transform-origin: center top;
+    .lamp-drop {
+      transform-origin: 370px 40px;
+      transform: rotate(55deg) translateY(-30px);
       opacity: 0;
-      animation: dropDown 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+      animation: pendulumSwing 2s cubic-bezier(0.34, 1.56, 0.64, 1) 1.2s forwards;
     }
 
-    .premium-shadow {
-      transform-origin: center;
+    .bulb-glow {
       opacity: 0;
-      animation: shadowGrow 1.5s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+      animation: tungstenIgnite 0.6s cubic-bezier(0.4, 0, 0.2, 1) 2.6s forwards, pulseGlow 4s ease-in-out 3.2s infinite alternate;
     }
 
-    .spotlight-beam {
+    .light-beam {
       opacity: 0;
-      transform-origin: 200px 110px;
+      transform-origin: 290px 110px;
+      animation: beamIgnite 0.6s cubic-bezier(0.4, 0, 0.2, 1) 2.6s forwards;
       mix-blend-mode: var(--beam-blend);
-      animation: cinematicIgnite 0.6s cubic-bezier(0.4, 0, 0.2, 1) 1.8s forwards;
     }
 
-    .bulb-flash {
-      opacity: 0;
-      animation: cinematicIgnite 0.6s cubic-bezier(0.4, 0, 0.2, 1) 1.8s forwards, pulseGlow 3s ease-in-out 2.4s infinite alternate;
-    }
-
-    .bulb-core {
-      opacity: 0;
-      animation: cinematicIgnite 0.6s cubic-bezier(0.4, 0, 0.2, 1) 1.8s forwards;
+    .floor-shadow {
+      opacity: 0.2;
+      transition: all 0.5s ease;
+      animation: shadowFocus 0.6s ease-out 2.6s forwards;
     }
 
     .particles {
       opacity: 0;
-      animation: fadeIn 1s ease 2s forwards;
+      animation: fadeIn 1s ease 2.8s forwards;
     }
 
     .particle {
       animation: floatUp 4s linear infinite;
     }
 
-    .p1 {
-      animation-duration: 3.5s;
+    .particle:nth-child(1) {
+      animation-duration: 3s;
       animation-delay: 0s;
     }
 
-    .p2 {
-      animation-duration: 4.2s;
+    .particle:nth-child(2) {
+      animation-duration: 4.5s;
       animation-delay: 1s;
     }
 
-    .p3 {
-      animation-duration: 3.8s;
+    .particle:nth-child(3) {
+      animation-duration: 3.5s;
       animation-delay: 0.5s;
     }
 
-    .p4 {
-      animation-duration: 4.5s;
+    .particle:nth-child(4) {
+      animation-duration: 5s;
       animation-delay: 2s;
     }
 
-    .p5 {
-      animation-duration: 4.0s;
+    .particle:nth-child(5) {
+      animation-duration: 4s;
       animation-delay: 1.5s;
     }
 
-    .premium-text {
+    .text-reveal {
       opacity: 0;
       transform: translateY(15px);
-      animation: textReveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) 2.2s forwards;
+      letter-spacing: 2px;
+      animation: cinematicText 1.5s cubic-bezier(0.16, 1, 0.3, 1) 3s forwards;
     }
 
-    /* --- KEYFRAMES --- */
-    @keyframes enterLeft {
+    /* Loader Keyframes */
+    @keyframes dropSquashChair {
       0% {
-        transform: translateX(-100px) rotate(-8deg);
+        transform: translate(-200px, -150px) rotate(-35deg) scale(0.8);
         opacity: 0;
       }
 
+      20% {
+        opacity: 1;
+      }
+
+      40% {
+        transform: translate(0, 0) rotate(0deg) scale(1.15, 0.85);
+        opacity: 1;
+      }
+
+      60% {
+        transform: translate(0, 0) rotate(0deg) scale(0.95, 1.05);
+      }
+
+      75% {
+        transform: translate(0, 0) rotate(0deg) scale(1.02, 0.98);
+      }
+
+      85% {
+        transform: translate(0, 0) rotate(0deg) scale(0.99, 1.01);
+      }
+
       100% {
-        transform: translateX(0) rotate(0deg);
+        transform: translate(0, 0) rotate(0deg) scale(1, 1);
         opacity: 1;
       }
     }
 
-    @keyframes enterRight {
+    @keyframes dropSquashTable {
       0% {
-        transform: translateX(100px) translateY(30px);
+        transform: translate(200px, -150px) rotate(35deg) scale(0.8);
         opacity: 0;
       }
 
+      20% {
+        opacity: 1;
+      }
+
+      40% {
+        transform: translate(0, 0) rotate(0deg) scale(1.15, 0.85);
+        opacity: 1;
+      }
+
+      60% {
+        transform: translate(0, 0) rotate(0deg) scale(0.95, 1.05);
+      }
+
+      75% {
+        transform: translate(0, 0) rotate(0deg) scale(1.02, 0.98);
+      }
+
+      85% {
+        transform: translate(0, 0) rotate(0deg) scale(0.99, 1.01);
+      }
+
       100% {
-        transform: translateX(0) translateY(0);
+        transform: translate(0, 0) rotate(0deg) scale(1, 1);
         opacity: 1;
       }
     }
 
-    @keyframes dropDown {
+    @keyframes pendulumSwing {
       0% {
-        transform: translateY(-60px);
+        transform: rotate(55deg);
         opacity: 0;
       }
 
+      30% {
+        opacity: 1;
+      }
+
+      40% {
+        transform: rotate(-15deg);
+      }
+
+      60% {
+        transform: rotate(8deg);
+      }
+
+      80% {
+        transform: rotate(-3deg);
+      }
+
       100% {
-        transform: translateY(0);
+        transform: rotate(0deg);
         opacity: 1;
       }
     }
 
-    @keyframes shadowGrow {
-      0% {
-        transform: scaleX(0.5);
-        opacity: 0;
-      }
-
-      100% {
-        transform: scaleX(1);
-        opacity: 0.8;
-      }
-    }
-
-    @keyframes cinematicIgnite {
+    @keyframes tungstenIgnite {
       0% {
         opacity: 0;
         filter: brightness(1);
-        transform: scaleY(0.8);
       }
 
       10% {
         opacity: 1;
         filter: brightness(3);
-        transform: scaleY(1.05);
       }
 
       20% {
         opacity: 0.2;
         filter: brightness(1);
-        transform: scaleY(0.95);
       }
 
       30% {
         opacity: 1;
         filter: brightness(4);
-        transform: scaleY(1.02);
       }
 
       40% {
         opacity: 0.5;
         filter: brightness(2);
+      }
+
+      100% {
+        opacity: 1;
+        filter: brightness(1.5);
+      }
+    }
+
+    @keyframes beamIgnite {
+      0% {
+        opacity: 0;
+        transform: scaleY(0.8);
+      }
+
+      10% {
+        opacity: 0.9;
+        transform: scaleY(1.05);
+      }
+
+      20% {
+        opacity: 0.1;
+        transform: scaleY(0.95);
+      }
+
+      30% {
+        opacity: 0.8;
+        transform: scaleY(1.02);
+      }
+
+      40% {
+        opacity: 0.3;
         transform: scaleY(0.98);
       }
 
       100% {
-        opacity: 0.85;
-        filter: brightness(1.2);
+        opacity: 0.6;
         transform: scaleY(1);
       }
     }
 
     @keyframes pulseGlow {
       0% {
-        filter: brightness(1.2) blur(4px);
+        filter: brightness(1.5) blur(4px);
       }
 
       100% {
-        filter: brightness(1.6) blur(8px);
+        filter: brightness(1.8) blur(6px);
       }
     }
 
-    @keyframes textReveal {
+    @keyframes shadowFocus {
+      0% {
+        opacity: 0.2;
+        transform: scale(1);
+      }
+
+      100% {
+        opacity: 0.8;
+        transform: scale(0.85);
+      }
+    }
+
+    @keyframes cinematicText {
       0% {
         opacity: 0;
         transform: translateY(15px);
         letter-spacing: 2px;
+        text-shadow: 0 0 0px rgba(255, 255, 255, 0);
       }
 
       100% {
         opacity: 1;
         transform: translateY(0);
         letter-spacing: 12px;
+        text-shadow: 0 5px 15px rgba(255, 216, 117, 0.4);
       }
     }
 
@@ -903,7 +984,7 @@
       <defs>
         <linearGradient id="beamGradient" x1="0%" y1="0%" x2="0%" y2="100%">
           <stop offset="0%" stop-color="var(--light-color)" stop-opacity="0.9" />
-          <stop offset="40%" stop-color="var(--light-color)" stop-opacity="0.25" />
+          <stop offset="40%" stop-color="var(--light-color)" stop-opacity="0.3" />
           <stop offset="100%" stop-color="var(--light-color)" stop-opacity="0" />
         </linearGradient>
 
@@ -919,8 +1000,8 @@
         </linearGradient>
 
         <filter id="bulbGlow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="6" result="blur1" />
-          <feGaussianBlur stdDeviation="12" result="blur2" />
+          <feGaussianBlur stdDeviation="8" result="blur1" />
+          <feGaussianBlur stdDeviation="15" result="blur2" />
           <feMerge>
             <feMergeNode in="blur2" />
             <feMergeNode in="blur1" />
@@ -929,49 +1010,65 @@
         </filter>
 
         <filter id="shadowBlur">
-          <feGaussianBlur stdDeviation="8" />
+          <feGaussianBlur stdDeviation="6" />
         </filter>
       </defs>
 
-      <ellipse class="premium-shadow" cx="200" cy="330" rx="130" ry="12" fill="var(--shadow-color)"
+      <ellipse class="floor-shadow" cx="200" cy="340" rx="120" ry="10" fill="var(--shadow-color)"
         filter="url(#shadowBlur)" />
 
       <g class="particles">
-        <circle class="particle p1" cx="160" cy="260" r="1.5" fill="var(--light-color)" />
-        <circle class="particle p2" cx="240" cy="210" r="2" fill="var(--light-color)" />
-        <circle class="particle p3" cx="190" cy="300" r="1" fill="var(--light-color)" />
-        <circle class="particle p4" cx="270" cy="280" r="2.5" fill="var(--light-color)" />
-        <circle class="particle p5" cx="210" cy="180" r="1.5" fill="var(--light-color)" />
+        <circle class="particle" cx="180" cy="280" r="1.5" fill="var(--light-color)" opacity="0.8" />
+        <circle class="particle" cx="240" cy="240" r="2" fill="var(--light-color)" opacity="0.6" />
+        <circle class="particle" cx="150" cy="300" r="1" fill="var(--light-color)" opacity="0.9" />
+        <circle class="particle" cx="280" cy="270" r="2.5" fill="var(--light-color)" opacity="0.4" />
+        <circle class="particle" cx="210" cy="220" r="1.5" fill="var(--light-color)" opacity="0.7" />
       </g>
 
-      <polygon class="spotlight-beam" points="185,90 215,90 450,380 -50,380" fill="url(#beamGradient)" />
-
-      <g class="sculpt-left">
-        <path d="M 110 320 V 200 A 65 65 0 0 1 240 200 V 320" fill="none" stroke="url(#metalC)" stroke-width="32"
-          stroke-linecap="butt" />
-        <path d="M 126 320 V 200 A 49 49 0 0 1 224 200 V 320" fill="none" stroke="var(--highlight)" stroke-width="2"
-          opacity="0.3" />
+      <g class="light-beam">
+        <polygon points="275,100 315,125 450,360 -20,360" fill="url(#beamGradient)" />
       </g>
 
-      <g class="sculpt-right">
-        <rect x="210" y="210" width="70" height="110" rx="2" fill="url(#metalM)" stroke="var(--loader-stroke)"
-          stroke-width="4" stroke-linejoin="round" />
-        <circle cx="245" cy="170" r="38" fill="var(--bg-core)" stroke="var(--loader-stroke)" stroke-width="6" />
-        <circle cx="235" cy="160" r="15" fill="var(--highlight)" opacity="0.2" filter="blur(4px)" />
+      <g class="chair-group">
+        <line x1="126" y1="284" x2="106" y2="334" stroke="var(--loader-stroke)" stroke-width="8"
+          stroke-linecap="round" />
+        <line x1="156" y1="289" x2="171" y2="334" stroke="var(--loader-stroke)" stroke-width="8"
+          stroke-linecap="round" />
+        <line x1="130" y1="280" x2="110" y2="330" stroke="var(--metal-dark)" stroke-width="6" stroke-linecap="round" />
+        <line x1="160" y1="285" x2="175" y2="330" stroke="var(--metal-dark)" stroke-width="6" stroke-linecap="round" />
+        <path
+          d="M 160 180 A 45 45 0 0 0 115 235 A 45 45 0 0 0 160 285 Q 195 285 195 260 Q 195 245 180 245 A 20 20 0 0 1 155 235 A 20 20 0 0 1 175 210 Q 185 210 180 190 Q 175 180 160 180 Z"
+          fill="url(#metalC)" stroke="var(--loader-stroke)" stroke-width="3" stroke-linejoin="round" />
+        <path d="M 155 185 A 40 40 0 0 0 120 235 A 40 40 0 0 0 160 275" fill="none" stroke="var(--highlight)"
+          stroke-width="2" stroke-linecap="round" opacity="0.4" />
       </g>
 
-      <g class="pendant-drop">
-        <line x1="200" y1="0" x2="200" y2="80" stroke="var(--loader-stroke)" stroke-width="4" />
-        <path d="M 175 110 L 195 80 H 205 L 225 110 Z" fill="var(--lamp-shade)" stroke="var(--loader-stroke)"
-          stroke-width="4" stroke-linejoin="round" />
-        <circle class="bulb-flash" cx="200" cy="110" r="14" fill="var(--light-color)" filter="url(#bulbGlow)" />
-        <circle class="bulb-core" cx="200" cy="110" r="8" fill="var(--light-intense)" />
-        <rect x="170" y="110" width="60" height="6" rx="2" fill="var(--loader-stroke)" />
-        <rect x="172" y="112" width="56" height="2" rx="1" fill="var(--lamp-shade-lip)" />
+      <g class="table-group">
+        <path d="M 235 330 L 245 245 L 265 295 L 285 245 L 295 330" fill="none" stroke="var(--loader-stroke)"
+          stroke-width="12" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M 235 330 L 245 245 L 265 295 L 285 245 L 295 330" fill="none" stroke="url(#metalC)" stroke-width="8"
+          stroke-linecap="round" stroke-linejoin="round" />
+        <rect x="215" y="235" width="110" height="14" rx="4" fill="url(#metalM)" stroke="var(--loader-stroke)"
+          stroke-width="2" />
+        <rect x="217" y="237" width="106" height="2" rx="1" fill="var(--highlight)" opacity="0.5" />
       </g>
 
-      <text class="premium-text" x="200" y="410" font-size="22" font-weight="700" fill="var(--loader-text)"
-        text-anchor="middle">
+      <g class="lamp-drop">
+        <path d="M 370 40 C 340 30 310 50 290 80" fill="none" stroke="var(--loader-stroke)" stroke-width="4"
+          stroke-linecap="round" />
+        <g transform="translate(290, 80) rotate(-35)">
+          <circle class="bulb-glow" cx="0" cy="35" r="18" fill="var(--light-color)" filter="url(#bulbGlow)" />
+          <circle cx="0" cy="35" r="10" fill="var(--light-intense)" opacity="0.8" />
+          <path d="M -40 40 C -40 -10 40 -10 40 40 Z" fill="var(--lamp-shade)" stroke="var(--loader-stroke)"
+            stroke-width="2" stroke-linejoin="round" />
+          <rect x="-44" y="40" width="88" height="8" rx="3" fill="var(--loader-stroke)" />
+          <rect x="-42" y="41" width="84" height="2" rx="1" fill="var(--lamp-shade-lip)" />
+          <path d="M -12 0 C -12 -18 12 -18 12 0 Z" fill="var(--loader-stroke)" />
+        </g>
+      </g>
+
+      <text class="text-reveal" x="200" y="420" font-size="28" font-weight="800" fill="var(--loader-text)"
+        text-anchor="middle" dominant-baseline="middle">
         CRAFT MOD
       </text>
     </svg>
